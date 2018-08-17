@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Zookeeper DashBoard</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <link th:href="@{~/css/bootstrap.min.css}" rel="stylesheet">
+    <link th:href="@{~/css/bootstrap-responsive.min.css}" rel="stylesheet">
+    <!-- 
+    <link th:href="@{http://fonts.googleapis.com/css?family=Open+Sans:400italic,600italic,400,600}"
+        rel="stylesheet">
+     -->
+    <link th:href="@{~/css/font-awesome.css}" rel="stylesheet">
+    <link th:href="@{~/css/style.css}" rel="stylesheet">
+</head>
+<body>
+    <div class="navbar navbar-fixed-top">
+        <div class="navbar-inner">
+            <div class="container">
+                <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse"><span
+                    class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span>
+                </a><a class="brand" href="index.html">Zookeeper Dashboard </a>
+                <!--/.nav-collapse -->
+            </div>
+            <!-- /container -->
+        </div>
+        <!-- /navbar-inner -->
+    </div>
+    <div class="main">
+        <div class="main-inner">
+            <div class="container">
+                <div class="row">
+                    <div class="span3">
+                        <div class="widget">
+                            <div class="widget-header">
+                                <i class="icon-bar-chart"></i>
+                                <h3>整体运行状态</h3>
+                            </div>
+                            <!-- /widget-header -->
+                            <div class="widget-content">
+                                <canvas id="bar-chart" class="chart-holder" width="538" height="250">
+                                </canvas>
+                                <!-- /bar-chart -->
+                            </div>
+                            <!-- /widget-content -->
+                        </div>  
+                    </div>
+                    <!-- /span9 -->
+                    <div class="span9">
+                        <div class="widget">
+                            <div class="widget-header">
+                                <i class="icon-bar-chart"></i>
+                                <h3>
+                                    Donut Chart</h3>
+                            </div>
+                            <!-- /widget-header -->
+                            <div class="widget-content">
+                                <canvas id="donut-chart" class="chart-holder" width="538" height="250">
+                                </canvas>
+                                <!-- /bar-chart -->
+                            </div>
+                            <!-- /widget-content -->
+                        </div>
+                        <!-- /widget -->
+                    </div>
+                    <!-- /span6 -->
+                </div>
+                <!-- /row -->
+            </div>
+            <!-- /container -->
+        </div>
+        <!-- /main-inner -->
+    </div>
+</body>
+</html>

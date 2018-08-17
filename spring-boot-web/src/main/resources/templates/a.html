@@ -1,0 +1,9 @@
+<html xmlns:th="http://www.thymeleaf.org">
+	<table th:each="list : ${all}" border="2"> 
+		     <tr th:each="zk4show : ${list}">
+		     	<td th:text="${zk4show.system}"/>
+		     	<td th:text="${zk4show.ip}"/>
+		     	<td th:text="${zk4show.key}"/>
+		     </tr> 
+	</table>
+</html>
