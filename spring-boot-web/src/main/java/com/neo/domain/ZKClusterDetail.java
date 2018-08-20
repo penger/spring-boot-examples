@@ -15,6 +15,7 @@ public class ZKClusterDetail {
 	private int pending;
 	private int watchers;
 	private int znodecount;
+	private String leaderip;
 	
 	private List<QuorumDetail> nodes;
 	
@@ -40,8 +41,9 @@ public class ZKClusterDetail {
 			if(q.getWatcher()>watchers) {
 				watchers=q.getWatcher();
 			}
-			if(q.getStatus().equals(QuorumStatus.FOLLOWER)) {
+			if(q.getStatus().equals(QuorumStatus.LEADER)) {
 				status = ZKStauts.OK;
+				leaderip=q.getIp();
 			}
 		}
 	}
@@ -115,6 +117,16 @@ public class ZKClusterDetail {
 	public void setZk4Show(ZK4Show zk4Show) {
 		this.zk4Show = zk4Show;
 	}
+	
+	public String getLeaderip() {
+		return leaderip;
+	}
+
+	public void setLeaderip(String leaderip) {
+		this.leaderip = leaderip;
+	}
+
+
 	@Override
 	public String toString() {
 		return "ZKClusterDetail [max_latency=" + max_latency + ", connections=" + connections + ", pending=" + pending

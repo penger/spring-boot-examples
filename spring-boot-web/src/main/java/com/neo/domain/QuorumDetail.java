@@ -1,6 +1,7 @@
 package com.neo.domain;
 
 public class QuorumDetail {
+	private String ip;
 	private int maxLatency;
 	private int aliveConns;
 	private QuorumStatus status;
@@ -32,6 +33,16 @@ public class QuorumDetail {
 		this.pending = pending;
 	}
 	
+	
+	
+	public String getIp() {
+		return ip;
+	}
+
+	public void setIp(String ip) {
+		this.ip = ip;
+	}
+
 	public int getMaxLatency() {
 		return maxLatency;
 	}

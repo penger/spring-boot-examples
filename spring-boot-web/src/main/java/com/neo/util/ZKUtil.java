@@ -30,6 +30,7 @@ public class ZKUtil {
 	
 	
 	public static QuorumDetail getQuorumDetail(String ip,int port,QuorumDetail detail) {
+		detail.setIp(ip);
 		LinkedList<String> zkStatus = getZKStatus(ip, port, "mntr");
 		if(zkStatus.isEmpty()) {
 			return detail;

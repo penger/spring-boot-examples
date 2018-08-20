@@ -1,74 +1,156 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <title>Zookeeper DashBoard</title>
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
-    <link th:href="@{~/css/bootstrap.min.css}" rel="stylesheet">
-    <link th:href="@{~/css/bootstrap-responsive.min.css}" rel="stylesheet">
-    <!-- 
+<title>Zookeeper DashBoard</title>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<link th:href="@{~/css/bootstrap.min.css}" rel="stylesheet">
+<link th:href="@{~/css/bootstrap-responsive.min.css}" rel="stylesheet">
+<!-- 
     <link th:href="@{http://fonts.googleapis.com/css?family=Open+Sans:400italic,600italic,400,600}"
         rel="stylesheet">
      -->
-    <link th:href="@{~/css/font-awesome.css}" rel="stylesheet">
-    <link th:href="@{~/css/style.css}" rel="stylesheet">
+<link th:href="@{~/css/font-awesome.css}" rel="stylesheet">
+<link th:href="@{~/css/style.css}" rel="stylesheet">
 </head>
 <body>
-    <div class="navbar navbar-fixed-top">
-        <div class="navbar-inner">
-            <div class="container">
-                <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse"><span
-                    class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span>
-                </a><a class="brand" href="index.html">Zookeeper Dashboard </a>
-                <!--/.nav-collapse -->
-            </div>
-            <!-- /container -->
-        </div>
-        <!-- /navbar-inner -->
-    </div>
-    <div class="main">
-        <div class="main-inner">
-            <div class="container">
-                <div class="row">
-                    <div class="span3">
-                        <div class="widget">
-                            <div class="widget-header">
-                                <i class="icon-bar-chart"></i>
-                                <h3>整体运行状态</h3>
-                            </div>
-                            <!-- /widget-header -->
-                            <div class="widget-content">
-                                <canvas id="bar-chart" class="chart-holder" width="538" height="250">
+	<div class="navbar navbar-fixed-top">
+		<div class="navbar-inner">
+			<div class="container">
+				<a class="btn btn-navbar" data-toggle="collapse"
+					data-target=".nav-collapse"><span class="icon-bar"></span><span
+					class="icon-bar"></span><span class="icon-bar"></span> </a><a
+					class="brand" href="index.html">Zookeeper Dashboard </a>
+				<!--/.nav-collapse -->
+			</div>
+			<!-- /container -->
+		</div>
+		<!-- /navbar-inner -->
+	</div>
+	<div class="main">
+		<div class="main-inner">
+			<div class="container">
+				<div class="row">
+					<div class="span3">
+						<div class="widget">
+							<div class="widget-header">
+								<i class="icon-bar-chart"></i>
+								<h3>整体运行状态</h3>
+							</div>
+							<!-- /widget-header -->
+							<div class="widget-content">
+								<canvas id="donut-chart" class="chart-holder" width="158"
+									height="250">
                                 </canvas>
-                                <!-- /bar-chart -->
-                            </div>
-                            <!-- /widget-content -->
-                        </div>  
-                    </div>
-                    <!-- /span9 -->
-                    <div class="span9">
-                        <div class="widget">
-                            <div class="widget-header">
-                                <i class="icon-bar-chart"></i>
-                                <h3>
-                                    Donut Chart</h3>
-                            </div>
-                            <!-- /widget-header -->
-                            <div class="widget-content">
-                                <canvas id="donut-chart" class="chart-holder" width="538" height="250">
-                                </canvas>
-                                <!-- /bar-chart -->
-                            </div>
-                            <!-- /widget-content -->
-                        </div>
-                        <!-- /widget -->
-                    </div>
-                    <!-- /span6 -->
-                </div>
-                <!-- /row -->
-            </div>
-            <!-- /container -->
-        </div>
-        <!-- /main-inner -->
-    </div>
+								<!-- /bar-chart -->
+							</div>
+							<!-- /widget-content -->
+						</div>
+					</div>
+					<!-- /span9 -->
+					<div class="span9">
+						<div class="widget">
+							<div class="widget-header">
+								<i class="icon-bar-chart"></i>
+								<h3>各个集群运行状况</h3>
+							</div>
+							<!-- /widget-header -->
+							<div class="widget-content">
+								<table class="table table-striped table-bordered">
+									<thead>
+										<tr>
+											<th>名称</th>
+											<th>leader</th>
+											<th>最大延迟</th>
+											<th>连接数</th>
+											<th>队列长度</th>
+											<th>观察者数量</th>
+											<th>znode节点数量</th>
+										</tr>
+									</thead>
+									<tbody>
+										<tr th:each="entry:${all}">
+											<td th:text="${entry.key}"></td>
+											<td th:text="${entry.value.leaderip}"></td>
+											<td th:text="${entry.value.max_latency}"></td>
+											<td th:text="${entry.value.connections}"></td>
+											<td th:text="${entry.value.pending}"></td>
+											<td th:text="${entry.value.watchers}"></td>
+											<td th:text="${entry.value.znodecount}"></td>
+										</tr>
+									</tbody>
+								</table>
+								<!-- /bar-chart -->
+							</div>
+							<!-- /widget-content -->
+						</div>
+						<!-- /widget -->
+					</div>
+					<!-- /span6 -->
+				</div>
+				<!-- /row -->
+			</div>
+			<!-- /container -->
+		</div>
+		<!-- /main-inner -->
+	</div>
+	<script th:src="@{js/jquery-1.7.2.min.js}"></script>
+	<script th:src="@{js/excanvas.min.js}"></script>
+	<script th:src="@{js/echarts.js}" type="text/javascript"></script>
+	<script th:src="@{js/bootstrap.js}"></script>
+	<script th:src="@{js/base.js}"></script>
+	<script type="text/javascript" th:inline="javascript">
+	$(function(){
+		var good=[[${good}]]
+		var bad=[[${bad}]]
+		option={
+				tooltip:{
+					trigger:'item',
+					formatter:"{a}<br/>{b}:{c}:({d}%)"
+				},
+		color:['green','red'],
+		legend:{
+			orient:'vertical',
+			x:'left',
+			data:['good','bad']
+		},
+		calculable:true,
+		series:[{
+			
+			name:'集群状态',
+			type:'pie',
+			radius:['30%','70%'],
+			itemStyle:{
+				normal:{
+					label:{
+						show:false
+					},
+					labelLine:{
+						show:false
+					}
+				},
+				emphasis:{
+					label:{
+						show:true,
+						position:'center',
+						textStyle:{
+							fontSize:'30',
+							fontWeight:'bold'
+						}
+					}
+				}
+			},
+			data:[
+				{value:good,name:'good'},
+				{value:bad,name:'bad'}
+			]
+		}
+			
+		]
+		}
+		var myDoughnut= echarts.init(document.getElementById("donut-chart"));
+		myDoughnut.setOption(option)
+		
+	})
+	</script>
 </body>
 </html>
