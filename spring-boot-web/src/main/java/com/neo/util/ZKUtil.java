@@ -15,6 +15,7 @@ import java.util.Map;
 
 import org.springframework.util.StringUtils;
 
+import com.neo.domain.GroupBean;
 import com.neo.domain.QuorumDetail;
 import com.neo.domain.QuorumStatus;
 import com.neo.domain.ZKInfo;
@@ -22,10 +23,10 @@ import com.neo.domain.ZKInfo;
 public class ZKUtil {
 
 	public static final String FILE_NAME="zklistinfo";
+	public static final String GROUP_FILE_NAME="zkgroup";
 	
 	public static void main(String[] args) {
-		// TODO Auto-generated method stub
-
+		getZKGroup();
 	}
 	
 	
@@ -123,6 +124,36 @@ public class ZKUtil {
 		list.add("conf");
 		list.add("mntr");
 		return list;
+	}
+	
+	public static Map<String, GroupBean> getZKGroup(){
+		Map<String,GroupBean> map = new HashMap<>();
+		String line=null;
+		try {
+			InputStream inputStream = ZKUtil.class.getClassLoader().getResourceAsStream(GROUP_FILE_NAME);
+			BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
+			while((line=reader.readLine())!=null) {
+				GroupBean group = new GroupBean();
+				String[] gstr = line.split("-");
+				String gname = gstr[0];
+				String gvalue = gstr[1];
+				String chartId= gstr[2];
+				List<String> list = new LinkedList<>();
+				String[] split = gvalue.split(",");
+				for (String s : split) {
+					list.add(s);
+				}
+				group.setGroupName(gname);
+				group.setIplist(list);
+				group.setChartID(chartId);
+				map.put(gname, group);
+			}
+			reader.close();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return map;
 	}
 	
 	

@@ -29,8 +29,24 @@
 	<div class="main">
 		<div class="main-inner">
 			<div class="container">
+				<div  class="row">
+					<div th:each="group:${groups}" class="span6">
+						<div class="widget">
+							<div class="widget-header">
+								<i class="icon-bar-chart"></i>
+								<h3 th:inline="text"> [[${group.groupName}]]</h3>
+							</div>
+							<!-- /widget-header -->
+							<div class="widget-content">
+								<div  th:id="${group.chartID}" style="height: 400px"> </div>
+								<!-- /bar-chart -->
+							</div>
+							<!-- /widget-content -->
+					</div>
+				</div>
+				</div>
 				<div class="row">
-					<div class="span3">
+					<div class="span4">
 						<div class="widget">
 							<div class="widget-header">
 								<i class="icon-bar-chart"></i>
@@ -38,16 +54,14 @@
 							</div>
 							<!-- /widget-header -->
 							<div class="widget-content">
-								<canvas id="donut-chart" class="chart-holder" width="158"
-									height="250">
-                                </canvas>
+								<div id="donut-chart" style="height: 400px"></div>
 								<!-- /bar-chart -->
 							</div>
 							<!-- /widget-content -->
 						</div>
 					</div>
-					<!-- /span9 -->
-					<div class="span9">
+					<!-- /span8 -->
+					<div class="span8">
 						<div class="widget">
 							<div class="widget-header">
 								<i class="icon-bar-chart"></i>
@@ -61,21 +75,21 @@
 											<th>名称</th>
 											<th>leader</th>
 											<th>最大延迟</th>
-											<th>连接数</th>
-											<th>队列长度</th>
-											<th>观察者数量</th>
+											<th>最大连接数</th>
+											<th>最长队列</th>
+											<th>最多观察者数量</th>
 											<th>znode节点数量</th>
 										</tr>
 									</thead>
 									<tbody>
-										<tr th:each="entry:${all}">
-											<td th:text="${entry.key}"></td>
-											<td th:text="${entry.value.leaderip}"></td>
-											<td th:text="${entry.value.max_latency}"></td>
-											<td th:text="${entry.value.connections}"></td>
-											<td th:text="${entry.value.pending}"></td>
-											<td th:text="${entry.value.watchers}"></td>
-											<td th:text="${entry.value.znodecount}"></td>
+										<tr th:each="d:${all}">
+											<td th:text="${d.zk4Show.system}"></td>
+											<td th:text="${d.leaderip}"></td>
+											<td th:text="${d.max_latency}"></td>
+											<td th:text="${d.connections}"></td>
+											<td th:text="${d.pending}"></td>
+											<td th:text="${d.watchers}"></td>
+											<td th:text="${d.znodecount}"></td>
 										</tr>
 									</tbody>
 								</table>
@@ -105,7 +119,7 @@
 		option={
 				tooltip:{
 					trigger:'item',
-					formatter:"{a}<br/>{b}:{c}:({d}%)"
+					formatter:"{a}x<br/>{b}:{c}:({d}%)"
 				},
 		color:['green','red'],
 		legend:{
@@ -118,7 +132,7 @@
 			
 			name:'集群状态',
 			type:'pie',
-			radius:['30%','70%'],
+			radius:['50%','90%'],
 			itemStyle:{
 				normal:{
 					label:{
@@ -133,7 +147,7 @@
 						show:true,
 						position:'center',
 						textStyle:{
-							fontSize:'30',
+							fontSize:'12',
 							fontWeight:'bold'
 						}
 					}
@@ -149,6 +163,49 @@
 		}
 		var myDoughnut= echarts.init(document.getElementById("donut-chart"));
 		myDoughnut.setOption(option)
+		
+		
+		var groupcount=[[${groupcount}]]
+		var groups=[[${groups}]]
+		for(i=0;i<groupcount;i++){
+			var group=groups[i]
+			console.log(group.leaderlist)
+			console.log(group.iplist)
+			// chart
+			tmpoption={
+				color:['#F4E001','#F0805A','#26C0C0'],
+				title:{
+					x:'center',
+					text:group.groupName+"组内的leader分布状态"
+				},
+				tooltip:{
+					trigger:'item'
+				},
+				calculable:true,
+				grid:{
+					borderWidth:0
+				},
+				xAxis:[{
+					type:'category',
+					show:true,
+					data:group.iplist
+				}],
+				yAxis:[
+					{
+						type:'value',
+						show:true
+					}
+				],
+				series:[
+					{
+						type:'bar',
+						data:group.leaderlist
+					}
+				]
+			}
+			var tmp_chart=echarts.init(document.getElementById(group.chartID));
+			tmp_chart.setOption(tmpoption);
+		}
 		
 	})
 	</script>

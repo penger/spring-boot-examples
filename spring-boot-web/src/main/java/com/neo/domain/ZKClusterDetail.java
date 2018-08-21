@@ -8,7 +8,7 @@ import java.util.List;
  * @author gongp
  *
  */
-public class ZKClusterDetail {
+public class ZKClusterDetail implements Comparable<ZKClusterDetail> {
 	
 	private int max_latency;
 	private int connections;
@@ -40,6 +40,9 @@ public class ZKClusterDetail {
 			}
 			if(q.getWatcher()>watchers) {
 				watchers=q.getWatcher();
+			}
+			if(q.getZnodes()>znodecount) {
+				znodecount=q.getZnodes();
 			}
 			if(q.getStatus().equals(QuorumStatus.LEADER)) {
 				status = ZKStauts.OK;
@@ -133,4 +136,13 @@ public class ZKClusterDetail {
 				+ ", watchers=" + watchers + ", znodecount=" + znodecount + ", status=" + status + "]";
 	}
 
+
+	@Override
+	public int compareTo(ZKClusterDetail o) {
+		return this.getZk4Show().getSystem().compareTo(o.getZk4Show().getSystem());
+	}
+
+	
+	
+	
 }

@@ -14,6 +14,7 @@ import java.util.concurrent.Executors;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.mvc.method.annotation.RequestResponseBodyMethodProcessor;
 
+import com.neo.domain.GroupBean;
 import com.neo.domain.QuorumDetail;
 import com.neo.domain.ZK4Show;
 import com.neo.domain.ZKClusterDetail;
@@ -95,6 +96,9 @@ public class ZKService {
 						}else {
 							ZKClusterDetail detail = new ZKClusterDetail();
 							detail.getNodes().add(quorumDetail);
+							ZK4Show zk4Show = new ZK4Show();
+							zk4Show.setSystem(name);
+							detail.setZk4Show(zk4Show );
 							resultMap.put(name, detail);
 						}
 						countDownLatch.countDown();
@@ -169,6 +173,12 @@ public class ZKService {
 		long used = end_time-start_time;
 		System.out.println("start at: "+ start_time + " end at : "+ end_time + " used : "+used );
 		return resultList;
+	}
+
+	public Map<String, GroupBean> getGroups() {
+		Map<String, GroupBean> groups = ZKUtil.getZKGroup();
+		return groups;
+		
 	}
 	
 	
